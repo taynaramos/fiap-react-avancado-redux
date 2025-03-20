@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addTransaction } from "src/features/transactions/transactionsSlice";
 import { Button } from "../Button";
 import { Card, Form, Heading, Input, Label, Select } from "./styles";
 
 export const TransactionForm = () => {
   const [transactionType, setTransactionType] = useState("");
   const [transactionValue, setSetTransactionValue] = useState("");
+  const dispatch = useDispatch();
 
   const createTransacion = (evt) => {
     evt.preventDefault();
-    console.log({
-      transactionType,
-      transactionValue,
-    });
+
+    dispatch(
+      addTransaction({
+        value: parseFloat(transactionValue),
+        type: transactionType,
+      })
+    );
   };
 
   const transactionTypes = useSelector((state) => state.transactionTypes.types);
@@ -29,7 +34,7 @@ export const TransactionForm = () => {
           <option value="" disabled hidden>
             Selecione o tipo de transação
           </option>
-          {transactionTypes.map(t => (
+          {transactionTypes.map((t) => (
             <option key={t} value={t}>
               {t}
             </option>
